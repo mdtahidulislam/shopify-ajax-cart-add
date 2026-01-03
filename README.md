@@ -5,11 +5,11 @@
 * Endpoint: **POST /{locale}/cart/add.js**
 * Supports adding **one or multiple variants** at the same time.
 * Each variant is passed as an **object** inside the <code>items</code> **array**.
-* <code>id</code> refers to the **variant ID**.
-* quantity specifies how many units of that variant to add.
-* To add multiple variants, simply append more objects to the items array.
-* The request can be made using the Fetch API.
-* When building the payload in JavaScript, send data as JSON.
-* Set the request header Content-Type: application/json.
-* The response returns JSON data of the line items that were added.
-* If a variant already exists in the cart, the returned quantity reflects the updated total quantity, not just the added amount.
+* <code>id</code> = **variant ID**.
+* <code>quantity</code> = number of units to add
+* Multiple variants can be added by **adding more objects"" to <code>items</code>
+* Request can be made using the **Fetch API**.
+* Send payload as **JSON**
+* Set header <code>Content-Type: application/json<code>.
+* Response returns **added cart line items as JSON**
+* If the item already exists, **quantity is updated to the new total**
