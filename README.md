@@ -18,6 +18,9 @@
 * If available **quantity exceeds** only automatically **adds the maximum available quantity**
 * Excess quantity is **ignored**
 * No error is thrown; cart reflects **in-stock limit**
+  * exceeds quantity
+  * entirely sold out
+  * not sold out, but all of its stock is in the cart
 
 ## Steps
 ### Prepare data
