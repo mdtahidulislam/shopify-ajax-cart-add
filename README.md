@@ -2,7 +2,7 @@
 
 ## Key points:
 
-* Use the *** POST /{locale}/cart/add.js *** endpoint to add products to the Shopify cart.
+* Endpoint: **POST /{locale}/cart/add.js**
 * The request supports adding one or multiple variants at the same time.
 * Each variant is represented as an object inside the items array.
 * id refers to the variant ID.
