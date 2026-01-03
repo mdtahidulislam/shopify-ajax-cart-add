@@ -13,3 +13,15 @@
 * Set header <code>Content-Type: application/json</code>.
 * Response returns **added cart line items as JSON**
 * If the item already exists, **quantity is updated to the new total**
+
+## Steps
+
+### object
+```js
+let formData = {
+ 'items': [{
+  'id': 36110175633573,
+  'quantity': 2
+  }]
+};
+```
