@@ -13,6 +13,7 @@
 * Set header <code>Content-Type: application/json</code>.
 * Response returns **added cart line items as JSON**
 * If the item already exists, **quantity is updated to the new total**
+* Can add **line item properties** & **selling plan**
 
 ## Quantity Error:
 * If available **quantity exceeds** only automatically **adds the maximum available quantity**
