@@ -71,3 +71,5 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 ```
 ## Resources
 * [add.js API](https://shopify.dev/docs/api/ajax/reference/cart#post--locale-cart-addjs)
+* [FormData constructor](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData)
+* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
