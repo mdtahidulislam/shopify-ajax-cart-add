@@ -69,3 +69,5 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
   console.error('Error:', error);
 });
 ```
+## Resources
+* [add.js API](https://shopify.dev/docs/api/ajax/reference/cart#post--locale-cart-addjs)
