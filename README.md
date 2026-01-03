@@ -15,8 +15,8 @@
 * If the item already exists, **quantity is updated to the new total**
 
 ## Steps
-
-###  FormData constructor
+### Prepare data
+####  FormData constructor
 
 ```js
 let formData = {
@@ -27,7 +27,7 @@ let formData = {
 };
 ```
 
-### using form contructor
+#### using form contructor
 ```js
 let addToCartForm = document.querySelector('form[action$="/cart/add"]');
 let formData = new FormData(addToCartForm);
