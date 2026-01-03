@@ -16,7 +16,8 @@
 
 ## Steps
 
-### object
+###  FormData constructor
+
 ```js
 let formData = {
  'items': [{
@@ -24,4 +25,10 @@ let formData = {
   'quantity': 2
   }]
 };
+```
+
+### using form contructor
+```js
+let addToCartForm = document.querySelector('form[action$="/cart/add"]');
+let formData = new FormData(addToCartForm);
 ```
