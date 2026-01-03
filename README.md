@@ -1,1 +1,1 @@
-# shopify-ajax-cart-add
+# AJAX Cart API: 
