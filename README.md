@@ -10,6 +10,6 @@
 * Multiple variants can be added by **adding more objects"" to <code>items</code>
 * Request can be made using the **Fetch API**.
 * Send payload as **JSON**
-* Set header <code>Content-Type: application/json<code>.
+* Set header <code>Content-Type: application/json</code>.
 * Response returns **added cart line items as JSON**
 * If the item already exists, **quantity is updated to the new total**
