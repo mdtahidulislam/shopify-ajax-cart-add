@@ -25,7 +25,7 @@ let formData = {
   }]
 };
 ```
-
+or
 #### Using FormData constructor
 ```js
 let addToCartForm = document.querySelector('form[action$="/cart/add"]');
