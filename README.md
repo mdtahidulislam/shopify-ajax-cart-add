@@ -14,6 +14,11 @@
 * Response returns **added cart line items as JSON**
 * If the item already exists, **quantity is updated to the new total**
 
+## Qunatity Error:
+* If available **quantity exceeds** only automatically **adds the maximum available quantity**
+* Excess quantity is **ignored**
+* No error is thrown; cart reflects **in-stock limit**
+
 ## Steps
 ### Prepare data
 #### Using Object
