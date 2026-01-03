@@ -4,7 +4,7 @@
 
 * Endpoint: **POST /{locale}/cart/add.js**
 * Supports adding **one or multiple variants** at the same time.
-* Each variant is passed as an **object** inside the items **array**.
+* Each variant is passed as an **object** inside the <code>items</code> **array**.
 * <code>id</code> refers to the **variant ID**.
 * quantity specifies how many units of that variant to add.
 * To add multiple variants, simply append more objects to the items array.
