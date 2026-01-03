@@ -16,8 +16,7 @@
 
 ## Steps
 ### Prepare data
-####  FormData constructor
-
+#### Using Object
 ```js
 let formData = {
  'items': [{
@@ -27,8 +26,38 @@ let formData = {
 };
 ```
 
-#### using form contructor
+#### Using FormData constructor
 ```js
 let addToCartForm = document.querySelector('form[action$="/cart/add"]');
 let formData = new FormData(addToCartForm);
+```
+
+### Make request
+```js
+fetch(window.Shopify.routes.root + 'cart/add.js', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(formData)
+})
+.then(response => {
+  return response.json();
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
+```
+or
+```js
+fetch(window.Shopify.routes.root + 'cart/add.js', {
+  method: 'POST',
+  body: formData
+})
+.then(response => {
+  return response.json();
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
 ```
