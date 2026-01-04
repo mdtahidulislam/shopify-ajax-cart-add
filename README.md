@@ -105,6 +105,60 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 {% endif %}
 ```
 
+### implement AJAX API
+* create assets/ajax-cart.js
+* modify main-product.liquid
+
+```liquid
+{% if settings.cart_type == 'ajax' %}
+	<script src="{{ 'ajax-cart.js' | asset_url }}" defer></script>
+{% endif %}
+```
+  
+```js
+class ProductForm extends HTMLElement {
+	constructor() {
+		super()
+		this.form = this.querySelector('form')
+		this.addButton = this.querySelector('#add-to-cart-btn')
+		this.handleSubmit = this.onSubmitHandler.bind(this)
+	}
+
+	connectedCallback() {
+		if (!this.form) return
+		this.addButton.addEventListener('click', this.handleSubmit)
+	}
+
+	disconnectedCallback() {
+		if (!this.form) return
+		this.addButton.removeEventListener('click', this.handleSubmit)
+	}
+
+	onSubmitHandler(e) {
+		e.preventDefault()
+		const formData = new FormData(this.form)
+		fetch(`${window.Shopify.routes.root}cart/add.js`, {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => {
+				if (!response.ok) throw new Error('Network response was not ok')
+				return response.json()
+			})
+			.then(data => {
+				console.log('AJAX Cart Success:', data)
+			})
+			.catch(error => {
+				console.error('AJAX Cart Error:', error)
+			})
+	}
+}
+
+if (!customElements.get('product-form')) {
+	customElements.define('product-form', ProductForm)
+}
+```
+
 ## Resources
 * [add.js API](https://shopify.dev/docs/api/ajax/reference/cart#post--locale-cart-addjs)
 * [FormData constructor](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData)
