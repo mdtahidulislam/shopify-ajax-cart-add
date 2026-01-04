@@ -71,10 +71,10 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 });
 ```
 
-## create settings
+### settings_schema.json
 ```json
 {
-"name": "Cart",
+  "name": "Cart",
   "settings": [
     {
       "type": "select",
@@ -94,6 +94,15 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
     }
   ]
 }
+```
+
+### modify add_to_cart btn
+``` liquid
+{% if settings.cart_type == 'ajax' %}
+  type="button"
+{% else %}
+  type="submit"
+{% endif %}
 ```
 
 ## Resources
