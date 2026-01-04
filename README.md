@@ -70,6 +70,32 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
   console.error('Error:', error);
 });
 ```
+
+## create settings
+```json
+{
+"name": "Cart",
+  "settings": [
+    {
+      "type": "select",
+      "id": "cart_type",
+      "label": "Cart Type",
+      "options": [
+         {
+             "value": "page",
+             "label": "Page"
+         },
+         {
+             "value": "ajax",
+             "label": "AJAX"
+         }
+      ],
+      "default": "page"
+    }
+  ]
+}
+```
+
 ## Resources
 * [add.js API](https://shopify.dev/docs/api/ajax/reference/cart#post--locale-cart-addjs)
 * [FormData constructor](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData)
