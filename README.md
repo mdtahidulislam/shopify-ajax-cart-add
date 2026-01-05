@@ -114,7 +114,7 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 	<script src="{{ 'ajax-cart.js' | asset_url }}" defer></script>
 {% endif %}
 ```
-  
+cretae custom element & ajax API
 ```js
 class ProductForm extends HTMLElement {
 	constructor() {
