@@ -106,8 +106,8 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 ```
 
 ### implement AJAX API
-* create assets/ajax-cart.js
-* modify main-product.liquid
+1. create assets/ajax-cart.js
+2. modify main-product.liquid
 
 ```liquid
 {% if settings.cart_type == 'ajax' %}
@@ -142,7 +142,6 @@ class ProductForm extends HTMLElement {
 			body: formData
 		})
 			.then(response => {
-				if (!response.ok) throw new Error('Network response was not ok')
 				return response.json()
 			})
 			.then(data => {
