@@ -114,7 +114,7 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 	<script src="{{ 'ajax-cart.js' | asset_url }}" defer></script>
 {% endif %}
 ```
-cretae custom element & ajax API
+**cretae custom element & add event listener to addtocart btn**
 ```js
 class ProductForm extends HTMLElement {
 	constructor() {
@@ -136,25 +136,69 @@ class ProductForm extends HTMLElement {
 
 	onSubmitHandler(e) {
 		e.preventDefault()
-		const formData = new FormData(this.form)
-		fetch(`${window.Shopify.routes.root}cart/add.js`, {
-			method: 'POST',
-			body: formData
-		})
-			.then(response => {
-				return response.json()
-			})
-			.then(data => {
-				console.log('AJAX Cart Success:', data)
-			})
-			.catch(error => {
-				console.error('AJAX Cart Error:', error)
-			})
+		console.log('clicked')
 	}
 }
 
 if (!customElements.get('product-form')) {
 	customElements.define('product-form', ProductForm)
+}
+```
+
+**get form data make API request**
+```js
+onSubmitHandler(e) {
+	...
+	const formData = new FormData(this.form)
+
+	fetch(`${window.Shopify.routes.root}cart/add.js`, {
+		method: 'POST',
+		body: formData
+	})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+		})
+		.catch(error => {
+			console.error('AJAX Cart Error:', error)
+		})
+
+}
+```
+
+**dispatch event after successfull request**
+```js
+.then(data => {
+	...
+	if (data.sections) {
+		document.dispatchEvent(
+			new CustomEvent('cart:updated', {
+				detail: {
+					sections: data.sections
+				}
+			})
+		)
+	}
+}
+```
+
+**fix maximum quantity error: add request headers**
+```js
+...
+headers: {
+ 	'X-Requested-With': 'XMLHttpRequest'
+}
+...
+```
+
+**handle error message**
+```js
+if (data.status === 422) {
+	this.handleErrorMessage(data.description || data.message)
+	return
 }
 ```
 
