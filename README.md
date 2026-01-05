@@ -170,7 +170,7 @@ onSubmitHandler(e) {
 ```
 
 **cart count on header**
--- modify header.liquid
+**-- modify header.liquid**
 ```liquid
 <span class="translate-middle badge rounded-pill bg-danger cart-count">
 	{{ cart.item_count }}
@@ -178,7 +178,7 @@ onSubmitHandler(e) {
 ```
 
 **update cart count: implement bundled section rendering**
--- sections/cart-icon-bubble.liquid
+**-- sections/cart-icon-bubble.liquid**
 ```liquid
 <span>
 	{% if cart == empty %}
@@ -188,13 +188,13 @@ onSubmitHandler(e) {
 	{% endif %}
 </span>
 ```
--- append sections to the formdata
+**-- append sections to the formdata**
 ```js
 	...
 	formData.append('sections', 'cart-drawer,cart-icon-bubble')
 	...
 ```
--- dispatch new custom event: cart:updated
+**-- dispatch new custom event: cart:updated**
 ```js
 if (data.sections) {
 	document.dispatchEvent(
@@ -206,20 +206,26 @@ if (data.sections) {
 	)
 }
 ```
--- listen the event and update cart: global.js
+**-- listen the event and update cart: global.js**
 ```js
 document.addEventListener('cart:updated', e => {
 	const sections = e.detail.sections
 	console.log(sections)
 })
 ```
--- parsed content
+**-- parsed content**
 ```js
 const parsedHTML = new DOMParser().parseFromString(sections['cart-icon-bubble'], 'text/html')
 const parsedContent = parsedHTML.querySelector('.shopify-section')
 console.log(parsedContent.innerHTML)
 ```
--- finally update content
+**-- finally update content**
+```js
+const target = document.querySelector('.cart-count')
+if (target) {
+	target.innerHTML = parsedContent.innerHTML
+}
+```
 
 **dispatch event after successfull request**
 ```js
