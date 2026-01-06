@@ -358,9 +358,9 @@ Object.keys(sections).forEach(sectionId => {
 	const target = document.getElementById(sectionId) || document.getElementById(`shopify-section-${sectionId}`)
 	if (target) {
 		console.log(`Updating section: ${sectionId}`)
-		const parsed = new DOMParser().parseFromString(sections[sectionId], 'text/html')
-		const content = parsed.querySelector('.shopify-section')
-		if (content) {
+		const parsedHTML = new DOMParser().parseFromString(sections[sectionId], 'text/html')
+		const parsedContent = parsedHTML.querySelector('.shopify-section')
+		if (parsedContent) {
 			target.innerHTML = content.innerHTML
 		} else {
 			// Fallback if shopify-section wrapper isn't found
