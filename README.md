@@ -106,12 +106,12 @@ fetch(window.Shopify.routes.root + 'cart/add.js', {
 ```
 
 ### implement AJAX API
-1. create assets/ajax-cart.js
+1. create assets/product-form.js
 2. modify main-product.liquid
 
 ```liquid
 {% if settings.cart_type == 'ajax' %}
-	<script src="{{ 'ajax-cart.js' | asset_url }}" defer></script>
+	<script src="{{ 'product-form.js' | asset_url }}" defer></script>
 {% endif %}
 ```
 **cretae custom element & add event listener to addtocart btn**
@@ -348,7 +348,7 @@ document.querySelector('.js-open-cart-drawer').addEventListener('click', e => {
 ```
 
 **update cart drawer content: bundled section rendering**
-***-- modify ajax-cart.js***
+***-- modify product-form.js***
 ```js
 formData.append('sections', 'cart-drawer,cart-icon-bubble')
 ```
