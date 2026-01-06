@@ -170,7 +170,7 @@ onSubmitHandler(e) {
 ```
 
 **cart count on header**
-**-- modify header.liquid**
+***-- modify header.liquid***
 ```liquid
 <span class="translate-middle badge rounded-pill bg-danger cart-count">
 	{{ cart.item_count }}
@@ -178,7 +178,7 @@ onSubmitHandler(e) {
 ```
 
 **update cart count: implement bundled section rendering**
-**-- sections/cart-icon-bubble.liquid**
+***-- sections/cart-icon-bubble.liquid***
 ```liquid
 <span>
 	{% if cart == empty %}
@@ -188,13 +188,13 @@ onSubmitHandler(e) {
 	{% endif %}
 </span>
 ```
-**-- append sections to the formdata**
+***-- append sections to the formdata***
 ```js
 	...
 	formData.append('sections', 'cart-drawer,cart-icon-bubble')
 	...
 ```
-**-- dispatch new custom event: cart:updated**
+***-- dispatch new custom event: cart:updated***
 ```js
 if (data.sections) {
 	document.dispatchEvent(
@@ -206,20 +206,20 @@ if (data.sections) {
 	)
 }
 ```
-**-- listen the event and update cart: global.js**
+***-- listen the event and update cart: global.js***
 ```js
 document.addEventListener('cart:updated', e => {
 	const sections = e.detail.sections
 	console.log(sections)
 })
 ```
-**-- parsed content**
+***-- parsed content***
 ```js
 const parsedHTML = new DOMParser().parseFromString(sections['cart-icon-bubble'], 'text/html')
 const parsedContent = parsedHTML.querySelector('.shopify-section')
 console.log(parsedContent.innerHTML)
 ```
-**-- finally update content**
+**-- finally update cart count**
 ```js
 const target = document.querySelector('.cart-count')
 if (target) {
@@ -227,20 +227,153 @@ if (target) {
 }
 ```
 
-**dispatch event after successfull request**
+**cart drawer**
+***-- sections/cart-drawer***
+```html
+<cart-drwer>
+	<div class="offcanvas offcanvas-end" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel">
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-id" id="cartDrawerLabel">Your Cart</h5>
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+		cart items
+		</div>
+	</div>
+</cart-drwer>
+```
+***-- render at layout/theme.liquid & see***
+```liquid
+{% section 'cart-drawer' %}
+```
+
+***-- all cart items: snippets/cart-drawer***
+```liquid
+<div id="cart-items">
+	{% if cart.item_count > 0 %}
+		<form action="{{ routes.cart_url }}" method="post">
+			<table class="table table-striped">
+				<tbody>
+					{% for item in cart.items %}
+						<tr>
+							<td>
+								<img
+									src="{{ item.image.src | image_url: width: 50 }}"
+									alt="{{ item.image.alt }}"
+									width="auto"
+									height="auto"
+									loading="lazy"
+								>
+							</td>
+							<td>
+								<h6>{{ item.product.title }}</h6>
+								<p>{{ item.original_price | money }}</p>
+								<div>
+									{% if item.product.has_only_default_variant == false %}
+										{% for option in item.options_with_values %}
+											<p class="m-0">{{ option.name }}: {{ option.value }}</p>
+										{% endfor %}
+									{% endif %}
+								</div>
+								<p>
+									Quantity:
+									<input type="number" name="updates[]" value="{{ item.quantity }}">
+								</p>
+							</td>
+							<td>
+								<strong>
+									{{ item.original_line_price | money }}
+								</strong>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</form>
+	{% else %}
+		<h2>Cart is Empty</h2>
+	{% endif %}
+</div>
+<div class="cart-drawer-footer border-top pt-3 mt-3">
+	<div class="d-flex justify-content-between mb-3">
+		<strong>Total:</strong>
+		<span id="cart-drawer-total">{{ cart.total_price | money }}</span>
+	</div>
+	<div class="d-grid gap-2">
+		<a href="{{ routes.cart_url }}" class="btn btn-outline-primary">View Cart</a>
+		<form action="{{ routes.cart_url }}" method="post">
+			<button type="submit" name="checkout" class="btn btn-primary w-100">Checkout</button>
+		</form>
+	</div>
+</div>
+```
+
+***-- modify sections/cart-drawer.liquid***
+```liquid
+...
+<div class="offcanvas-body">
+	{% render 'cart-drawer' %}
+</div>
+...
+```
+
+**Open cart drawer: after ajax request & btn click**
+***-- modify global.js***
 ```js
-.then(data => {
+document.addEventListener('cart:updated', e => {
 	...
-	if (data.sections) {
-		document.dispatchEvent(
-			new CustomEvent('cart:updated', {
-				detail: {
-					sections: data.sections
-				}
-			})
-		)
+	openCartDrawer()
+})
+function openCartDrawer() {
+	const cartDrawer = document.getElementById('cartDrawer')
+	if (cartDrawer && typeof bootstrap !== 'undefined') {
+		const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(cartDrawer)
+		bsOffcanvas.show()
 	}
 }
+```
+***-- modify header.liquid**
+```liquid
+<a
+	class="nav-link position-relative {% if settings.cart_type == 'ajax' %}js-open-cart-drawer{% endif %}"
+	href="{{ routes.cart_url }}"
+>
+```
+***-- modify global.js***
+```js
+document.querySelector('.js-open-cart-drawer').addEventListener('click', e => {
+	e.preventDefault()
+	openCartDrawer()
+})
+```
+
+**update cart drawer content: bundled section rendering**
+***-- modify ajax-cart.js***
+```js
+formData.append('sections', 'cart-drawer,cart-icon-bubble')
+```
+***-- refactor cart:updated event at global.js***
+```js
+Object.keys(sections).forEach(sectionId => {
+	const target = document.getElementById(sectionId) || document.getElementById(`shopify-section-${sectionId}`)
+	if (target) {
+		console.log(`Updating section: ${sectionId}`)
+		const parsed = new DOMParser().parseFromString(sections[sectionId], 'text/html')
+		const content = parsed.querySelector('.shopify-section')
+		if (content) {
+			target.innerHTML = content.innerHTML
+		} else {
+			// Fallback if shopify-section wrapper isn't found
+			target.innerHTML = sections[sectionId]
+		}
+	} else {
+		console.warn(`Target not found for section: ${sectionId}`)
+	}
+})
+```
+***-- modify header.liquid***
+```html
+<span id="cart-icon-bubble" class="translate-middle badge rounded-pill bg-danger cart-count">
 ```
 
 **fix maximum quantity error: add request headers**
@@ -253,11 +386,35 @@ headers: {
 ```
 
 **handle error message**
+***--modify main-product.liquid***
+```html
+<div id="product-form-error" class="text-danger mt-2 d-none"></div>
+```
+***--create handleErrorMessage method: ajax-cart.liquid***
 ```js
+this.errorContainer = this.querySelector('#product-form-error')
+
+handleErrorMessage(message) {
+	if (!this.errorContainer) return
+	
+	this.errorContainer.textContent = message
+	this.errorContainer.classList.remove('d-none')
+}
+
 if (data.status === 422) {
 	this.handleErrorMessage(data.description || data.message)
 	return
 }
+```
+
+***-- clear error message: handleErrorMessage(message)***
+```js
+setTimeout(() => {
+	if (this.errorContainer) {
+		this.errorContainer.classList.add('d-none')
+		this.errorContainer.textContent = ''
+	}
+}, 3000)
 ```
 
 ## Resources
