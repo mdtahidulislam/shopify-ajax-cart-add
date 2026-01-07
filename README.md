@@ -388,7 +388,7 @@ headers: {
 **handle error message**
 ***--modify main-product.liquid***
 ```html
-<div id="product-form-error" class="text-danger mt-2 d-none"></div>
+<div id="product-form-error" class="text-danger mt-2"></div>
 ```
 ***--create handleErrorMessage method: ajax-cart.liquid***
 ```js
@@ -398,7 +398,6 @@ handleErrorMessage(message) {
 	if (!this.errorContainer) return
 	
 	this.errorContainer.textContent = message
-	this.errorContainer.classList.remove('d-none')
 }
 
 if (data.status === 422) {
@@ -411,7 +410,6 @@ if (data.status === 422) {
 ```js
 setTimeout(() => {
 	if (this.errorContainer) {
-		this.errorContainer.classList.add('d-none')
 		this.errorContainer.textContent = ''
 	}
 }, 3000)
